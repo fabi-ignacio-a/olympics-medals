@@ -8,40 +8,22 @@ import
     useEffect  
   }
 from 'react';
+import UseFecthCountries from './hooks/UseFetchCountries';
 
 const URL = 'http://localhost:4000/countries';
 
 function App() {
 
   //Declaración de los state que se utilizan en este proyecto
-  const [countries, setCountries] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const [{isLoading, isError, countries}, fetchCountries] = UseFecthCountries();
   const [isEditMedals, setIsEditMedals] = useState( { showForm: false,country: null } );
   const [onChangeMedal, setOnChangeMedal] = useState( { gold: '', silver: '', bronze: '' } );
   const [didMedalUpdate, setDidMedalUpdate] = useState(false);
 
   //Definición de funciones y useEffect {Hooks}
-  useEffect(
-    () => {
-        const fetchCountries = async() => {
-        try{
-
-          const response = await fetch(URL);
-          const countries = await response.json();
-          const sortCountries = await countries.sort( (a, b) => {
-            return b.medals[0].gold  - a.medals[0].gold;
-          })
-
-          setCountries(sortCountries);
-          setIsLoading(false);
-
-        }catch (e){
-          setIsError(true);
-        }
-      }
-      fetchCountries();
-    }, [didMedalUpdate]);
+  useEffect( () => {
+      fetchCountries();  
+    }, [didMedalUpdate, fetchCountries]);
 
   const editMedals = (country) => {
     const {medals: [{gold, silver, bronze}]} = country;

@@ -56,7 +56,7 @@
         {
           "gold": 20,
           "silver": 15,
-          "bronze": 1
+          "bronze": 12
         }
       ]
     },
@@ -91,7 +91,7 @@
       "medals": [
         {
           "gold": 10,
-          "silver": 2,
+          "silver": 12,
           "bronze": 1
         }
       ]
