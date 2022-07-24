@@ -19,8 +19,9 @@ function App() {
   const [isError, setIsError] = useState(false);
   const [isEditMedals, setIsEditMedals] = useState( { showForm: false,country: null } );
   const [onChangeMedal, setOnChangeMedal] = useState( { gold: '', silver: '', bronze: '' } );
+  const [didMedalUpdate, setDidMedalUpdate] = useState(false);
 
-
+  //Definición de funciones y useEffect {Hooks}
   useEffect(
     () => {
         const fetchCountries = async() => {
@@ -40,8 +41,7 @@ function App() {
         }
       }
       fetchCountries();
-    }, []
-  );
+    }, [didMedalUpdate]);
 
   const editMedals = (country) => {
     const {medals: [{gold, silver, bronze}]} = country;
@@ -56,13 +56,41 @@ function App() {
     })
   };
 
+  //Metodo para actualizar las medallas
+  const updateMedales = async(id, country) => {
+    setDidMedalUpdate(false);
+    const response = await fetch(`${URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(country)
+    })
+
+    await response.json();
+    await setDidMedalUpdate(true);
+  };
+
+  const onSubmitMedals = ((event, {country}, newMedals) => {
+    const { gold, silver, bronze } = newMedals;
+    updateMedales(country.id, {
+      ...country, medals:[{
+        gold,
+        silver,
+        bronze
+      }]
+    });
+    event.preventDefault();
+  });
+
+  //Condicionales para mandar mensajes de "Cargando" y por si ocurre algún error
   if(isLoading){
     return (
       <div className='App App-container'>
         <p style={ {color: '#fff'} }>... Cargando </p>
       </div>
     )
-  }
+  };
 
   if(isError){
     return (
@@ -70,7 +98,7 @@ function App() {
         <p style={ {color: '#fff'} }>... Algo malo ocurrió </p>
       </div>
     )
-  }
+  };
 
   return (
     <div className="App">
@@ -120,7 +148,10 @@ function App() {
               <span> { isEditMedals.country.flag } </span>
               <p> { isEditMedals.country.name } </p>
               </div>
-              <form action= "" className='medal-form'>
+              <form 
+              className='medal-form'
+              onSubmit = { (event) => onSubmitMedals(event, isEditMedals, onChangeMedal) }
+              >
                 <div className='update-container'>
                   <label htmlFor=''>Oro: </label>
                   <input 
