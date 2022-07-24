@@ -5,29 +5,51 @@ import
   React,
   { 
     useState,
-    useEffect  
+    useEffect,
+    //useRedecur sirve para, en casos de useState muy complicados, hacerlo más sencillo de aplicar.
+    useReducer  
   }
 from 'react';
 import UseFecthCountries from './hooks/UseFetchCountries';
 
 const URL = 'http://localhost:4000/countries';
 
+const medalsReducer = (state, action) => {
+  switch(action.type){
+    case 'EDIT_MEDALS':{
+      return {
+        ...state,
+        isEditMedals: action.payload
+      }
+    }
+    default:
+      throw new Error();
+  }
+}
+
 function App() {
 
   //Declaración de los state que se utilizan en este proyecto
-  const [{isLoading, isError, countries}, fetchCountries] = UseFecthCountries();
-  const [isEditMedals, setIsEditMedals] = useState( { showForm: false,country: null } );
+  const [ { isLoading, isError, countries }, fetchCountries] = UseFecthCountries();
   const [onChangeMedal, setOnChangeMedal] = useState( { gold: '', silver: '', bronze: '' } );
-  const [didMedalUpdate, setDidMedalUpdate] = useState(false);
+
+  //Lógica del useReducer
+  const [state, dispatch] = useReducer(medalsReducer, {
+    isEditMedals: {
+      showForm: false,
+      country: null,
+      didMedalUpdate: false
+    }
+  })
 
   //Definición de funciones y useEffect {Hooks}
   useEffect( () => {
       fetchCountries();  
-    }, [didMedalUpdate, fetchCountries]);
+    }, [state.isEditMedals.didMedalUpdate, fetchCountries]);
 
   const editMedals = (country) => {
-    const {medals: [{gold, silver, bronze}]} = country;
-    setIsEditMedals( {showForm: true, country})
+    const { medals: [{gold, silver, bronze}] } = country;
+    dispatch( { type: 'EDIT_MEDALS', payload: {showForm: true, country } } )
     setOnChangeMedal({gold, silver, bronze});
   };
 
@@ -40,7 +62,6 @@ function App() {
 
   //Metodo para actualizar las medallas
   const updateMedales = async(id, country) => {
-    setDidMedalUpdate(false);
     const response = await fetch(`${URL}/${id}`, {
       method: 'PUT',
       headers: {
@@ -50,8 +71,7 @@ function App() {
     })
 
     await response.json();
-    await setDidMedalUpdate(true);
-    await setIsEditMedals(false);
+    await dispatch( { type: 'EDIT_MEDALS', payload:{showForm: false, didMedalUpdate: true} } )
   };
 
   const onSubmitMedals = ((event, {country}, newMedals) => {
@@ -125,15 +145,15 @@ function App() {
 
         <div className='medal-form-container'>
             {
-              isEditMedals.showForm && 
+              state.isEditMedals.showForm && 
               <>
               <div className='country-selecter-wrapper'>
-              <span> { isEditMedals.country.flag } </span>
-              <p> { isEditMedals.country.name } </p>
+              <span> { state.isEditMedals.country.flag } </span>
+              <p> { state.isEditMedals.country.name } </p>
               </div>
               <form 
               className='medal-form'
-              onSubmit = { (event) => onSubmitMedals(event, isEditMedals, onChangeMedal) }
+              onSubmit = { (event) => onSubmitMedals(event, state.isEditMedals, onChangeMedal) }
               >
                 <div className='update-container'>
                   <label htmlFor=''>Oro: </label>
@@ -172,7 +192,7 @@ function App() {
               <div className='update-container'>
                   <button 
                     className='cancel-btn'
-                    onClick={() => setIsEditMedals(false)}
+                    onClick={() => state.setIsEditMedals(false)}
                   >
                     Cancelar formulario
                   </button>
