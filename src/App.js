@@ -13,10 +13,13 @@ const URL = 'http://localhost:4000/countries';
 
 function App() {
 
+  //Declaración de los state que se utilizan en este proyecto
   const [countries, setCountries] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [isEditMedals, setIsEditMedals] = useState({showForm: false, country: null});
+  const [isEditMedals, setIsEditMedals] = useState( { showForm: false,country: null } );
+  const [onChangeMedal, setOnChangeMedal] = useState( { gold: '', silver: '', bronze: '' } );
+
 
   useEffect(
     () => {
@@ -38,7 +41,20 @@ function App() {
       }
       fetchCountries();
     }, []
-  )
+  );
+
+  const editMedals = (country) => {
+    const {medals: [{gold, silver, bronze}]} = country;
+    setIsEditMedals( {showForm: true, country})
+    setOnChangeMedal({gold, silver, bronze});
+  };
+
+  const handleInputChange = (event, keyName) => {
+    event.persist();
+    setOnChangeMedal((onChangeMedal) => {
+      return { ...onChangeMedal, [keyName]: event.target.value }
+    })
+  };
 
   if(isLoading){
     return (
@@ -80,9 +96,7 @@ function App() {
                     <tr>
                       <th>{ country.flag }</th>
                       <th 
-                        onClick={ 
-                          () => setIsEditMedals( {showForm: true, country} ) 
-                        } 
+                        onClick = { () => editMedals(country) } 
                         className="edit-medals"
                         >
                         { country.name }
@@ -110,29 +124,34 @@ function App() {
                 <div className='update-container'>
                   <label htmlFor=''>Oro: </label>
                   <input 
-                  type="text" 
-                  className='medal-input' 
-                  value={ isEditMedals.country.medals[0].gold }
+                  type = "text" 
+                  className = 'medal-input' 
+                  value = { onChangeMedal.gold }
+                  onChange = { (event) => handleInputChange(event, 'gold') }
                   />
                 </div>
                 <div className='update-container'>
                   <label htmlFor=''>Plata: </label>
                   <input 
-                  type="text" 
-                  className='medal-input' 
-                  value={ isEditMedals.country.medals[0].silver }
+                  type = "text" 
+                  className = 'medal-input' 
+                  value = { onChangeMedal.silver }
+                  onChange = { (event) => handleInputChange(event, 'silver') }
                   />
                 </div>
                 <div className='update-container'>
-                  <label htmlFor=''>Oro: </label>
+                  <label htmlFor=''>Bronce: </label>
                   <input 
-                  type="text" 
-                  className='medal-input' 
-                  value={ isEditMedals.country.medals[0].bronze }
+                  type = "text" 
+                  className = 'medal-input' 
+                  value = { onChangeMedal.bronze }
+                  onChange = { (event) => handleInputChange(event, 'bronze') }
                   />
                 </div>
                 <div className='update-container'>
-                  <button className='update-btn'>
+                  <button 
+                    className='update-btn'
+                  >
                     Actualizar
                   </button>
               </div>
