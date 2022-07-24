@@ -6,9 +6,9 @@
       "flag": "🇺🇸",
       "medals": [
         {
-          "gold": 13,
+          "gold": 15,
           "silver": 1,
-          "bronze": "10"
+          "bronze": 10
         }
       ]
     },
@@ -18,8 +18,8 @@
       "flag": "🇩🇪",
       "medals": [
         {
-          "gold": "1",
-          "silver": 1,
+          "gold": 1,
+          "silver": 12,
           "bronze": 4
         }
       ]
@@ -42,8 +42,8 @@
       "flag": "🇨🇺",
       "medals": [
         {
-          "gold": "40",
-          "silver": "8",
+          "gold": 1,
+          "silver": 8,
           "bronze": 6
         }
       ]
@@ -54,8 +54,8 @@
       "flag": "🇨🇦",
       "medals": [
         {
-          "gold": "1",
-          "silver": "15",
+          "gold": 20,
+          "silver": 15,
           "bronze": 1
         }
       ]
@@ -80,7 +80,7 @@
         {
           "gold": 5,
           "silver": 2,
-          "bronze": "1"
+          "bronze": 10
         }
       ]
     },
@@ -90,8 +90,8 @@
       "flag": "🇪🇸",
       "medals": [
         {
-          "gold": "10",
-          "silver": "1",
+          "gold": 10,
+          "silver": 2,
           "bronze": 1
         }
       ]
@@ -103,8 +103,8 @@
       "medals": [
         {
           "gold": 6,
-          "silver": "3",
-          "bronze": "5"
+          "silver": 4,
+          "bronze": 5
         }
       ]
     }

@@ -69,15 +69,16 @@ function App() {
 
     await response.json();
     await setDidMedalUpdate(true);
+    await setIsEditMedals(false);
   };
 
   const onSubmitMedals = ((event, {country}, newMedals) => {
     const { gold, silver, bronze } = newMedals;
     updateMedales(country.id, {
       ...country, medals:[{
-        gold,
-        silver,
-        bronze
+        gold: parseInt(gold),
+        silver: parseInt(silver),
+        bronze: parseInt(bronze)
       }]
     });
     event.preventDefault();
@@ -184,6 +185,14 @@ function App() {
                     className='update-btn'
                   >
                     Actualizar
+                  </button>
+              </div>
+              <div className='update-container'>
+                  <button 
+                    className='cancel-btn'
+                    onClick={() => setIsEditMedals(false)}
+                  >
+                    Cancelar formulario
                   </button>
               </div>
               </form>
