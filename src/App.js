@@ -144,7 +144,7 @@ function App() {
     <div className="App">
       <section className="App-container">
         <Title text ="Cuadro de medallas" />
-        <table width="800" border="1" cellPadding="1" cellSpacing="1">
+        <table width="800" border="0" cellPadding="1" cellSpacing="1">
           <tbody>
             <tr>
               <th></th>
