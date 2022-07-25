@@ -6,11 +6,12 @@ import
   { 
     useState,
     useEffect,
-    //useRedecur sirve para, en casos de useState muy complicados, hacerlo más sencillo de aplicar.
+    //useReducer sirve para, en casos de useState muy complicados, hacerlo más sencillo de aplicar.
     useReducer  
   }
 from 'react';
 import UseFecthCountries from './hooks/UseFetchCountries';
+import Button from './component/buttons';
 
 const URL = 'http://localhost:4000/countries';
 
@@ -183,19 +184,18 @@ function App() {
                   />
                 </div>
                 <div className='update-container'>
-                  <button 
-                    className='update-btn'
-                  >
-                    Actualizar
-                  </button>
+                  <Button 
+                    type = "primary"
+                    text = "Actualizar"
+                    styles = {{marginRight: 10}}
+                  />
               </div>
               <div className='update-container'>
-                  <button 
-                    className='cancel-btn'
-                    onClick={() => state.setIsEditMedals(false)}
-                  >
-                    Cancelar formulario
-                  </button>
+                  <Button 
+                    type = "default"
+                    onClick = { () => dispatch({ type: 'EDIT_MEDALS', payload:{ showForm: false }})}
+                    text = "Cancelar"
+                  />
               </div>
               </form>
               </>
