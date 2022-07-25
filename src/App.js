@@ -11,6 +11,8 @@ import
 from 'react';
 import UseFecthCountries from './hooks/UseFetchCountries';
 import Button from './component/buttons';
+import Title from './component/Title';
+import Message from './component/Messages';
 
 const URL = 'http://localhost:4000/countries';
 
@@ -65,7 +67,8 @@ function App() {
             payload: 
               { 
                 showForm: true, 
-                country 
+                country,
+                didMedalUpdate: false 
               } 
             } )
     setOnChangeMedal({gold, silver, bronze});
@@ -110,11 +113,21 @@ function App() {
     event.preventDefault();
   });
 
+  const cancelUpdate = () =>  
+    dispatch(
+      { 
+        type: 'EDIT_MEDALS', 
+        payload:{ 
+          showForm: false, 
+          didMedalUpdate: false 
+        } 
+  });
+
   //Condicionales para mandar mensajes de "Cargando" y por si ocurre algún error
   if(isLoading){
     return (
       <div className='App App-container'>
-        <p style={ {color: '#fff'} }>... Cargando </p>
+        < Message text =  " ... Cargando "/>
       </div>
     )
   };
@@ -122,7 +135,7 @@ function App() {
   if(isError){
     return (
       <div className='App App-container'>
-        <p style={ {color: '#fff'} }>... Algo malo ocurrió </p>
+        < Message text = " ... Algo malo ocurrió "/>
       </div>
     )
   };
@@ -130,7 +143,7 @@ function App() {
   return (
     <div className="App">
       <section className="App-container">
-        <h3> Cuadro de medallas </h3>
+        <Title text ="Cuadro de medallas" />
         <table width="800" border="1" cellPadding="1" cellSpacing="1">
           <tbody>
             <tr>
@@ -225,7 +238,7 @@ function App() {
               <div className='update-container'>
                   <Button 
                     type = "default"
-                    onClick = { () => dispatch({ type: 'EDIT_MEDALS', payload:{ showForm: false }})}
+                    onClick = {cancelUpdate}
                     text = "Cancelar"
                   />
               </div>
