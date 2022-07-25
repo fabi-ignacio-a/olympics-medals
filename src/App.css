@@ -67,3 +67,13 @@ form label {
   border: 0px solid #dbdbdb;
   margin-right: 10px;
 }
+
+.country-update{
+  animation: blinker 2s linear 0.1s;
+}
+
+@keyframes blinker {
+  20%{
+    opacity: 0;
+  }
+}

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 
 import 
@@ -31,15 +30,26 @@ const medalsReducer = (state, action) => {
 function App() {
 
   //Declaración de los state que se utilizan en este proyecto
-  const [ { isLoading, isError, countries }, fetchCountries] = UseFecthCountries();
-  const [onChangeMedal, setOnChangeMedal] = useState( { gold: '', silver: '', bronze: '' } );
+  const [ 
+    { 
+      isLoading, 
+      isError, 
+      countries 
+    }, fetchCountries] = UseFecthCountries();
+  const [onChangeMedal, setOnChangeMedal] = useState( 
+                                                      { 
+                                                        gold: '', 
+                                                        silver: '', 
+                                                        bronze: '' 
+                                                      } );
 
   //Lógica del useReducer
   const [state, dispatch] = useReducer(medalsReducer, {
     isEditMedals: {
       showForm: false,
       country: null,
-      didMedalUpdate: false
+      didMedalUpdate: false,
+      id: null,
     }
   })
 
@@ -50,7 +60,14 @@ function App() {
 
   const editMedals = (country) => {
     const { medals: [{gold, silver, bronze}] } = country;
-    dispatch( { type: 'EDIT_MEDALS', payload: {showForm: true, country } } )
+    dispatch( { 
+            type: 'EDIT_MEDALS', 
+            payload: 
+              { 
+                showForm: true, 
+                country 
+              } 
+            } )
     setOnChangeMedal({gold, silver, bronze});
   };
 
@@ -72,7 +89,13 @@ function App() {
     })
 
     await response.json();
-    await dispatch( { type: 'EDIT_MEDALS', payload:{showForm: false, didMedalUpdate: true} } )
+    await dispatch( { 
+      type: 'EDIT_MEDALS', 
+      payload: {
+        showForm: false, 
+        didMedalUpdate: true,
+        id
+       } } )
   };
 
   const onSubmitMedals = ((event, {country}, newMedals) => {
@@ -122,9 +145,18 @@ function App() {
           
             {
               countries.map(country => {
-                const {medals: [{gold, silver, bronze}]} = country;
+                const {medals: 
+                  [{
+                      gold, 
+                      silver, 
+                      bronze
+                  }], id } = country;
                 return(
-                  <tbody key={country.id}>
+                  <tbody 
+                    className = { state.isEditMedals.id === id ? 'country-update' : '' }
+                    key = {country.id} 
+                    
+                  >
                     <tr>
                       <th>{ country.flag }</th>
                       <th 
